@@ -26,3 +26,4 @@ export 'package:markdown4f/org.markdown4j/plugin.dart';
 export 'package:markdown4f/org.markdown4j/tableplugin.dart';
 export 'package:markdown4f/org.markdown4j/yumlplugin.dart';
 export 'package:markdown4f/org.markdown4j/client/markdownprocessor.dart';
+export 'package:markdown4f/org.markdown4j/client/shared/default_emoji_emitter.dart';
