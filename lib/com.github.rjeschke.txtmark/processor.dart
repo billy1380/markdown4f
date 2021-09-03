@@ -365,7 +365,7 @@ class Processor {
                   !(t == LineType.OLIST || t == LineType.ULIST)))) {
         root.split(line.previous!).type = BlockType.LIST_ITEM;
       }
-      line = line.next!;
+      line = line.next;
     }
     root.split(root.lineTail!).type = BlockType.LIST_ITEM;
   }
