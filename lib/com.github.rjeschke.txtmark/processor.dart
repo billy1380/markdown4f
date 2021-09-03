@@ -90,7 +90,7 @@ class Processor {
       return processReaderWithConfig(StringReader(input), configuration);
     } on IOException {
       // This _can never_ happen
-      return null;
+      return "";
     }
   }
 
@@ -224,8 +224,8 @@ class Processor {
   Block _readLines() {
     final Block block = Block();
     final StringBuffer sb = StringBuffer(80);
-    String c = this._reader.read();
-    LinkRef lastLinkRef;
+    String? c = this._reader.read();
+    LinkRef? lastLinkRef;
     while (c != null) {
       sb.clear();
       int pos = 0;
@@ -270,7 +270,7 @@ class Processor {
 
       // Check for link definitions
       bool isLinkRef = false;
-      String id, link, comment;
+      String? id, link, comment;
       if (!line.isEmpty &&
           line.leading < 4 &&
           line.value[line.leading] == '[') {
@@ -318,7 +318,7 @@ class Processor {
           lastLinkRef = null;
         } else {
           // Store linkRef and skip line
-          final LinkRef lr = LinkRef(link, comment,
+          final LinkRef lr = LinkRef(link, comment ?? "",
               comment != null && (link.length == 1 && link[0] == '*'));
           this._emitter.addLinkRef(id, lr);
           if (comment == null) lastLinkRef = lr;
@@ -354,8 +354,8 @@ class Processor {
   /// @param root
   ///            The Block to process.
   void _initListBlock(final Block root) {
-    Line line = root.lines;
-    line = line.next;
+    Line? line = root.lines;
+    line = line!.next;
     while (line != null) {
       final LineType t = line.getLineType(this._useExtensions);
       if ((t == LineType.OLIST || t == LineType.ULIST) ||
@@ -363,11 +363,11 @@ class Processor {
               (line.prevEmpty &&
                   line.leading == 0 &&
                   !(t == LineType.OLIST || t == LineType.ULIST)))) {
-        root.split(line.previous).type = BlockType.LIST_ITEM;
+        root.split(line.previous!).type = BlockType.LIST_ITEM;
       }
-      line = line.next;
+      line = line.next!;
     }
-    root.split(root.lineTail).type = BlockType.LIST_ITEM;
+    root.split(root.lineTail!).type = BlockType.LIST_ITEM;
   }
 
   /// Recursively process the given Block.
@@ -377,15 +377,15 @@ class Processor {
   /// @param listMode
   ///            Flag indicating that we're in a list item block.
   void _recurse(final Block root, bool listMode) {
-    Block block, list;
-    Line line = root.lines;
+    Block? block, list;
+    Line? line = root.lines;
 
     if (listMode) {
       root.removeListIndent(this._useExtensions);
       if (this._useExtensions &&
           root.lines != null &&
-          root.lines.getLineType(this._useExtensions) != LineType.CODE) {
-        root.id = root.lines.stripID();
+          root.lines!.getLineType(this._useExtensions) != LineType.CODE) {
+        root.id = root.lines!.stripID();
       }
     }
 
@@ -419,13 +419,13 @@ class Processor {
               bt = (listMode && !wasEmpty)
                   ? BlockType.NONE
                   : BlockType.PARAGRAPH;
-              root.split(line.previous).type = bt;
+              root.split(line.previous!).type = bt;
               root.removeLeadingEmptyLines();
             } else {
               bt = (listMode && (line == null || !line.isEmpty) && !wasEmpty)
                   ? BlockType.NONE
                   : BlockType.PARAGRAPH;
-              root.split(line == null ? root.lineTail : line).type = bt;
+              root.split(line == null ? root.lineTail! : line).type = bt;
               root.removeLeadingEmptyLines();
             }
             line = root.lines;
@@ -435,16 +435,16 @@ class Processor {
           while (line != null && (line.isEmpty || line.leading > 3)) {
             line = line.next;
           }
-          block = root.split(line != null ? line.previous : root.lineTail);
+          block = root.split(line != null ? line.previous! : root.lineTail!);
           block.type = BlockType.CODE;
           block.removeSurroundingEmptyLines();
           break;
         case LineType.XML:
           if (line.previous != null) {
             // FIXME ... this looks wrong
-            root.split(line.previous);
+            root.split(line.previous!);
           }
-          root.split(line.xmlEndLine).type = BlockType.XML;
+          root.split(line.xmlEndLine!).type = BlockType.XML;
           root.removeLeadingEmptyLines();
           line = root.lines;
           break;
@@ -457,7 +457,7 @@ class Processor {
               break;
             line = line.next;
           }
-          block = root.split(line != null ? line.previous : root.lineTail);
+          block = root.split(line != null ? line.previous! : root.lineTail!);
           block.type = BlockType.BLOCKQUOTE;
           block.removeSurroundingEmptyLines();
           block.removeBlockQuotePrefix();
@@ -467,7 +467,7 @@ class Processor {
         case LineType.HR:
           if (line.previous != null) {
             // FIXME ... this looks wrong
-            root.split(line.previous);
+            root.split(line.previous!);
           }
           root.split(line).type = BlockType.RULER;
           root.removeLeadingEmptyLines();
@@ -483,12 +483,12 @@ class Processor {
             line = line.next;
           }
           if (line != null) line = line.next;
-          block = root.split(line != null ? line.previous : root.lineTail);
+          block = root.split(line != null ? line.previous! : root.lineTail!);
           block.type = BlockType.FENCED_CODE;
-          block.meta = MarkdownUtils.getMetaFromFence(block.lines.value);
-          block.lines.setEmpty();
-          if (block.lineTail.getLineType(this._useExtensions) ==
-              LineType.FENCED_CODE) block.lineTail.setEmpty();
+          block.meta = MarkdownUtils.getMetaFromFence(block.lines!.value);
+          block.lines!.setEmpty();
+          if (block.lineTail!.getLineType(this._useExtensions) ==
+              LineType.FENCED_CODE) block.lineTail!.setEmpty();
           block.removeSurroundingEmptyLines();
           break;
         case LineType.PLUGIN:
@@ -500,28 +500,28 @@ class Processor {
             line = line.next;
           }
           if (line != null) line = line.next;
-          block = root.split(line != null ? line.previous : root.lineTail);
+          block = root.split(line != null ? line.previous! : root.lineTail!);
           block.type = BlockType.PLUGIN;
-          block.meta = MarkdownUtils.getMetaFromFence(block.lines.value);
-          block.lines.setEmpty();
-          if (block.lineTail.getLineType(this._useExtensions) ==
-              LineType.PLUGIN) block.lineTail.setEmpty();
+          block.meta = MarkdownUtils.getMetaFromFence(block.lines!.value);
+          block.lines!.setEmpty();
+          if (block.lineTail!.getLineType(this._useExtensions) ==
+              LineType.PLUGIN) block.lineTail!.setEmpty();
           block.removeSurroundingEmptyLines();
           break;
         case LineType.HEADLINE:
         case LineType.HEADLINE1:
         case LineType.HEADLINE2:
           if (line.previous != null) {
-            root.split(line.previous);
+            root.split(line.previous!);
           }
           if (type != LineType.HEADLINE) {
-            line.next.setEmpty();
+            line.next!.setEmpty();
           }
           block = root.split(line);
           block.type = BlockType.HEADLINE;
           if (type != LineType.HEADLINE)
             block.hlDepth = type == LineType.HEADLINE1 ? 1 : 2;
-          if (this._useExtensions) block.id = block.lines.stripID();
+          if (this._useExtensions) block.id = block.lines!.stripID();
           block.transfromHeadline();
           root.removeLeadingEmptyLines();
           line = root.lines;
@@ -536,14 +536,14 @@ class Processor {
                     !(t == LineType.OLIST || t == LineType.ULIST))) break;
             line = line.next;
           }
-          list = root.split(line != null ? line.previous : root.lineTail);
+          list = root.split(line != null ? line.previous! : root.lineTail!);
           list.type = type == LineType.OLIST
               ? BlockType.ORDERED_LIST
               : BlockType.UNORDERED_LIST;
-          list.lines.prevEmpty = false;
-          list.lineTail.nextEmpty = false;
+          list.lines!.prevEmpty = false;
+          list.lineTail!.nextEmpty = false;
           list.removeSurroundingEmptyLines();
-          list.lines.prevEmpty = list.lineTail.nextEmpty = false;
+          list.lines!.prevEmpty = list.lineTail!.nextEmpty = false;
           _initListBlock(list);
           block = list.blocks;
           while (block != null) {
@@ -569,7 +569,7 @@ class Processor {
     parent.removeSurroundingEmptyLines();
 
     this._recurse(parent, false);
-    Block block = parent.blocks;
+    Block? block = parent.blocks;
     while (block != null) {
       this._emitter.emit(out, block);
       block = block.next;

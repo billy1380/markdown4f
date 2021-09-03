@@ -31,14 +31,14 @@ class ExtDecorator extends DefaultDecorator {
   }
 
   bool _open(StringBuffer out, String tagName, [bool closed = true]) {
-    Map<String, String> atts = _attributes[tagName];
+    Map<String, String>? atts = _attributes[tagName];
     if (atts != null) {
       out.write("<");
       out.write(tagName);
       Iterator<String> it = atts.keys.iterator;
       while (it.moveNext()) {
         String key = it.current;
-        String value = atts[key];
+        String? value = atts[key];
         out.write(" ");
         out.write(key);
         out.write("=\"");

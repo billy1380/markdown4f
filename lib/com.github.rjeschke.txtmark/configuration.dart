@@ -31,11 +31,11 @@ class Configuration {
   final bool safeMode;
   final String encoding;
   final Decorator decorator;
-  final BlockEmitter codeBlockEmitter;
-  final EmojiEmitter emojiEmitter;
+  final BlockEmitter? codeBlockEmitter;
+  final EmojiEmitter? emojiEmitter;
   final bool forceExtendedProfile;
   final bool convertNewline2Br;
-  final SpanEmitter specialLinkEmitter;
+  final SpanEmitter? specialLinkEmitter;
   final List<Plugin> plugins;
 
   ///
@@ -115,9 +115,9 @@ class Builder {
   bool _convertNewline2Br = false;
   String _encoding = "UTF-8";
   Decorator _decorator = DefaultDecorator();
-  BlockEmitter _codeBlockEmitter;
-  SpanEmitter _specialLinkEmitter;
-  EmojiEmitter _emojiEmitter;
+  BlockEmitter? _codeBlockEmitter;
+  SpanEmitter? _specialLinkEmitter;
+  EmojiEmitter? _emojiEmitter;
   List<Plugin> _plugins = <Plugin>[];
 
   ///
@@ -224,7 +224,7 @@ class Builder {
   /// @return This builder.
   /// @since 0.7
   ///
-  Builder setSpecialLinkEmitter(SpanEmitter emitter) {
+  Builder setSpecialLinkEmitter(SpanEmitter? emitter) {
     this._specialLinkEmitter = emitter;
     return this;
   }
@@ -236,7 +236,7 @@ class Builder {
   ///            The emitter.
   /// @return This builder.
   ///
-  Builder setEmojiEmitter(EmojiEmitter emitter) {
+  Builder setEmojiEmitter(EmojiEmitter? emitter) {
     this._emojiEmitter = emitter;
     return this;
   }
@@ -250,10 +250,9 @@ class Builder {
   ///
   Builder registerPlugins(List<Plugin> plugins) {
     for (Plugin plugin in plugins) {
-      if (plugin != null) {
-        this._plugins.add(plugin);
-      }
+      this._plugins.add(plugin);
     }
+    
     return this;
   }
 

@@ -30,7 +30,7 @@ import 'package:markdown4f/com.github.rjeschke.txtmark/stringutils.dart';
 ///
 class Line {
   /// Current cursor position.
-  int pos;
+  int pos = 0;
 
   /// Leading and trailing spaces.
   int leading = 0, trailing = 0;
@@ -39,16 +39,16 @@ class Line {
   bool isEmpty = true;
 
   /// This line's value.
-  String value;
+  late String value;
 
   /// Previous and next line.
-  Line previous, next;
+  Line? previous, next;
 
   /// Is previous/next line empty?
-  bool prevEmpty, nextEmpty;
+  bool prevEmpty = false, nextEmpty = false;
 
   /// Final line of a XML block.
-  Line xmlEndLine;
+  Line? xmlEndLine;
 
   ///
   /// Calculates leading and trailing spaces. Also sets empty if needed.
@@ -102,7 +102,7 @@ class Line {
   ///         reached.
   ///
   // TODO use Util#readUntil
-  String readUntil(List<String> end) {
+  String? readUntil(List<String> end) {
     final StringBuffer sb = StringBuffer();
     int pos = this.pos;
     while (pos < this.value.length) {
@@ -167,8 +167,8 @@ class Line {
     this.value = "";
     this.leading = this.trailing = 0;
     this.isEmpty = true;
-    if (this.previous != null) this.previous.nextEmpty = true;
-    if (this.next != null) this.next.prevEmpty = true;
+    if (this.previous != null) this.previous!.nextEmpty = true;
+    if (this.next != null) this.next!.prevEmpty = true;
   }
 
   ///
@@ -273,10 +273,10 @@ class Line {
       if (this._checkHTML()) return LineType.XML;
     }
 
-    if (this.next != null && !this.next.isEmpty) {
-      if ((this.next.value[0] == '-') && (this.next._countChars('-') > 0))
+    if (this.next != null && !this.next!.isEmpty) {
+      if ((this.next!.value[0] == '-') && (this.next!._countChars('-') > 0))
         return LineType.HEADLINE2;
-      if ((this.next.value[0] == '=') && (this.next._countChars('=') > 0))
+      if ((this.next!.value[0] == '=') && (this.next!._countChars('=') > 0))
         return LineType.HEADLINE1;
     }
 
@@ -293,7 +293,7 @@ class Line {
   /// @return The new position or -1 if it is no valid comment.
   ///
   int _readXMLComment(final Line firstLine, final int start) {
-    Line line = firstLine;
+    Line? line = firstLine;
     if (start + 3 < line.value.length) {
       if (line.value[2] == '-' && line.value[3] == '-') {
         int pos = start + 4;
@@ -326,7 +326,7 @@ class Line {
   /// @return The ID or <code>null</code> if no valid ID exists.
   ///
   // FIXME ... hack
-  String stripID() {
+  String? stripID() {
     if (this.isEmpty ||
         this.value[this.value.length - this.trailing - 1] != '}') return null;
     int p = this.leading;
@@ -419,13 +419,13 @@ class Line {
       }
       tags.add(tag);
 
-      Line line = this;
+      Line? line = this;
       while (line != null) {
         while (pos < line.value.length && line.value[pos] != '<') {
           pos++;
         }
         if (pos >= line.value.length) {
-          line = line.next;
+          line = line.next!;
           pos = 0;
         } else {
           temp.clear();

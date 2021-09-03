@@ -17,23 +17,23 @@ class YumlPlugin extends Plugin {
       }
     }
 
-    String type = params["type"];
+    String? type = params["type"];
     if (type == null) {
       type = "class";
     }
-    String style = params["style"];
+    String? style = params["style"];
     if (style == null) {
       style = "scruffy";
     }
-    String dir = params["dir"];
+    String? dir = params["dir"];
     if (dir != null) {
       style = style + ";dir:" + dir;
     }
-    String scale = params["scale"];
+    String? scale = params["scale"];
     if (scale != null) {
       style = style + ";scale:" + scale;
     }
-    String format = params["format"];
+    String? format = params["format"];
 
     out.write("<img src=\"http://yuml.me/diagram/" + style + "/" + type + "/");
     out.write(sb2.toString());

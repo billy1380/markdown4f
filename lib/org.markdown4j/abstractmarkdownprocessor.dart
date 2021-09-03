@@ -9,16 +9,16 @@ import 'package:markdown4f/org.markdown4j/plugin.dart';
 import 'package:markdown4f/org.markdown4j/yumlplugin.dart';
 
 abstract class AbstractMarkdownProcessor {
-  Builder _builder;
-  ExtDecorator _decorator;
+  late Builder _builder;
+  late ExtDecorator _decorator;
 
   void registerPlugins();
 
-  EmojiEmitter emojiEmitter() {
+  EmojiEmitter? emojiEmitter() {
     return null;
   }
 
-  SpanEmitter spanEmitter() {
+  SpanEmitter? spanEmitter() {
     return null;
   }
 

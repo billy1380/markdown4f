@@ -599,7 +599,7 @@ class MarkdownUtils {
     Match m;
     while (matches.moveNext()) {
       m = matches.current;
-      params[m.group(1)] = m.group(2);
+      params[m.group(1)!] = m.group(2)!;
     }
 
     return params;

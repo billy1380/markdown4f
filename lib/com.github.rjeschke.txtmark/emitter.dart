@@ -93,7 +93,7 @@ class Emitter {
         this._config.decorator.openHeadline(out, root);
         if (this.useExtensions && root.id != null) {
           out.write(" id=\"");
-          MarkdownUtils.appendCode(out, root.id, 0, root.id.length);
+          MarkdownUtils.appendCode(out, root.id!, 0, root.id!.length);
           out.write('"');
         }
         out.write('>');
@@ -119,7 +119,7 @@ class Emitter {
         this._config.decorator.openListItem(out, root);
         if (this.useExtensions && root.id != null) {
           out.write(" id=\"");
-          MarkdownUtils.appendCode(out, root.id, 0, root.id.length);
+          MarkdownUtils.appendCode(out, root.id!, 0, root.id!.length);
           out.write('"');
         }
         out.write('>');
@@ -131,7 +131,7 @@ class Emitter {
     if (root.hasLines() || root.type == BlockType.PLUGIN) {
       this._emitLines(out, root);
     } else {
-      Block block = root.blocks;
+      Block? block = root.blocks;
       while (block != null) {
         this.emit(out, block);
         block = block.next;
@@ -182,22 +182,22 @@ class Emitter {
   void _emitLines(final StringBuffer out, final Block block) {
     switch (block.type) {
       case BlockType.CODE:
-        this._emitCodeLines(out, block.lines, block.meta, true);
+        this._emitCodeLines(out, block.lines!, block.meta, true);
         break;
       case BlockType.FENCED_CODE:
-        this._emitCodeLines(out, block.lines, block.meta, false);
+        this._emitCodeLines(out, block.lines!, block.meta, false);
         break;
       case BlockType.PLUGIN:
-        this.emitPluginLines(out, block.lines, block.meta);
+        this.emitPluginLines(out, block.lines!, block.meta);
         break;
       case BlockType.XML:
-        this._emitRawLines(out, block.lines);
+        this._emitRawLines(out, block.lines!);
         break;
       case BlockType.PARAGRAPH:
-        this._emitMarkedLines(out, block.lines);
+        this._emitMarkedLines(out, block.lines!);
         break;
       default:
-        this._emitMarkedLines(out, block.lines);
+        this._emitMarkedLines(out, block.lines!);
         break;
     }
   }
@@ -245,11 +245,12 @@ class Emitter {
     pos = MarkdownUtils.readMdLinkId(temp, input, pos);
     if (pos < start) return -1;
 
-    String name = temp.toString(), link, comment;
+    String name = temp.toString();
+    String? link, comment;
     final int oldPos = pos++;
     pos = MarkdownUtils.skipSpaces(input, pos);
     if (pos < start) {
-      final LinkRef lr = this._linkRefs[name.toLowerCase()];
+      final LinkRef? lr = this._linkRefs[name.toLowerCase()];
       if (lr != null) {
         isAbbrev = lr.isAbbrev;
         link = lr.link;
@@ -291,13 +292,13 @@ class Emitter {
       pos = MarkdownUtils.readRawUntil(temp, input, pos, ']');
       if (pos < start) return -1;
       final String id = temp.length > 0 ? temp.toString() : name;
-      final LinkRef lr = this._linkRefs[id.toLowerCase()];
+      final LinkRef? lr = this._linkRefs[id.toLowerCase()];
       if (lr != null) {
         link = lr.link;
         comment = lr.title;
       }
     } else {
-      final LinkRef lr = this._linkRefs[name.toLowerCase()];
+      final LinkRef? lr = this._linkRefs[name.toLowerCase()];
       if (lr != null) {
         isAbbrev = lr.isAbbrev;
         link = lr.link;
@@ -319,7 +320,7 @@ class Emitter {
         this._recursiveEmitLine(out, name, 0, MarkToken.NONE);
         out.write("</abbr>");
       } else {
-        this._config.decorator.openLink(out, link, comment);
+        this._config.decorator.openLink(out, link, comment ?? "");
         out.write(" href=\"");
         MarkdownUtils.appendValue(out, link, 0, link.length);
         out.write('"');
@@ -333,7 +334,7 @@ class Emitter {
         out.write("</a>");
       }
     } else {
-      this._config.decorator.openImage(out, link, comment);
+      this._config.decorator.openImage(out, link, comment ?? "");
       out.write(" src=\"");
       MarkdownUtils.appendValue(out, link, 0, link.length);
       out.write("\" alt=\"");
@@ -373,7 +374,7 @@ class Emitter {
       pos = MarkdownUtils.readUntil(temp, input, pos, '>');
       if (pos != -1) {
         final String link = temp.toString();
-        this._config.decorator.openLink(out, link, null);
+        this._config.decorator.openLink(out, link, "");
         out.write(" href=\"");
         MarkdownUtils.appendValue(out, link, 0, link.length);
         out.write("\">");
@@ -391,7 +392,7 @@ class Emitter {
       pos = MarkdownUtils.readUntil(temp, input, pos, '>');
       if (pos != -1) {
         final String link = temp.toString();
-        this._config.decorator.openLink(out, link, null);
+        this._config.decorator.openLink(out, link, "");
         out.write(" href=\"");
 
         // address auto links
@@ -564,7 +565,7 @@ class Emitter {
             if (this._config.emojiEmitter != null) {
               this
                   ._config
-                  .emojiEmitter
+                  .emojiEmitter!
                   .emitEmoji(out, name, this._config.decorator);
             } else {
               out.write(name);
@@ -616,7 +617,7 @@ class Emitter {
           b = this
               ._recursiveEmitLine(temp, input, pos + 2, MarkToken.X_LINK_CLOSE);
           if (b > 0 && this._config.specialLinkEmitter != null) {
-            this._config.specialLinkEmitter.emitSpan(out, temp.toString());
+            this._config.specialLinkEmitter!.emitSpan(out, temp.toString());
             pos = b + 1;
           } else {
             out.write(input[pos]);
@@ -768,7 +769,6 @@ class Emitter {
           default:
             return MarkToken.NONE;
         }
-        break;
       case '<':
         if (this.useExtensions && c1 == '<') return MarkToken.X_LAQUO;
         return MarkToken.HTML;
@@ -816,7 +816,7 @@ class Emitter {
   ///
   void _emitMarkedLines(final StringBuffer out, final Line lines) {
     final StringBuffer input = StringBuffer();
-    Line line = lines;
+    Line? line = lines;
     while (line != null) {
       if (!line.isEmpty) {
         input.write(line.value
@@ -844,7 +844,7 @@ class Emitter {
   ///            The lines to write.
   ///
   void _emitRawLines(final StringBuffer out, final Line lines) {
-    Line line = lines;
+    Line? line = lines;
     if (this._config.safeMode) {
       final StringBuffer temp = StringBuffer();
       while (line != null) {
@@ -893,7 +893,7 @@ class Emitter {
   ///
   void _emitCodeLines(final StringBuffer out, final Line lines,
       final String meta, final bool removeIndent) {
-    Line line = lines;
+    Line? line = lines;
     if (this._config.codeBlockEmitter != null) {
       final List<String> list = <String>[];
       while (line != null) {
@@ -903,7 +903,7 @@ class Emitter {
           list.add(removeIndent ? line.value.substring(4) : line.value);
         line = line.next;
       }
-      this._config.codeBlockEmitter.emitBlock(out, list, meta);
+      this._config.codeBlockEmitter!.emitBlock(out, list, meta);
     } else {
       while (line != null) {
         if (!line.isEmpty) {
@@ -943,18 +943,16 @@ class Emitter {
   ///
   void emitPluginLines(
       final StringBuffer out, final Line lines, final String meta) {
-    Line line = lines;
+    Line? line = lines;
 
     String idPlugin = meta;
     String sparams;
-    Map<String, String> params;
+    Map<String, String>? params;
     int iow = meta.indexOf(' ');
     if (iow != -1) {
       idPlugin = meta.substring(0, iow);
       sparams = meta.substring(iow + 1);
-      if (sparams != null) {
-        params = MarkdownUtils.parseParams(sparams);
-      }
+      params = MarkdownUtils.parseParams(sparams);
     }
 
     if (params == null) {
@@ -969,7 +967,7 @@ class Emitter {
       line = line.next;
     }
 
-    Plugin plugin = _plugins[idPlugin];
+    Plugin? plugin = _plugins[idPlugin];
     if (plugin != null) {
       plugin.emit(out, list, params);
     }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 extension StringUtils on String {
   bool operator <(String other) {
     return this.compareTo(other) < 0;
@@ -39,7 +37,7 @@ extension StringUtils on String {
 }
 
 abstract class Reader {
-  String read();
+  String? read();
 }
 
 class StringReader implements Reader {
@@ -49,8 +47,8 @@ class StringReader implements Reader {
   StringReader(this._value);
 
   @override
-  String read() {
-    String read;
+  String? read() {
+    String? read;
 
     if (_offset < _value.length) {
       read = _value[_offset];

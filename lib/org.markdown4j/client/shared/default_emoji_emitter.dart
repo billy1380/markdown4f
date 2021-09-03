@@ -26,7 +26,7 @@ class DefaultEmojiEmitter implements EmojiEmitter {
   }
 
   static String html(String name) {
-    String c = code(name), html = "";
+    String? c = code(name), html = "";
 
     if (c == null) {
     } else {
@@ -36,7 +36,7 @@ class DefaultEmojiEmitter implements EmojiEmitter {
     return html;
   }
 
-  static String code(String name) {
+  static String? code(String name) {
     // smiling face with open mouth and smiling eyes
     if (":u1f604:" == name || ":smile:" == name) return "1f604";
     // smiling face with open mouth

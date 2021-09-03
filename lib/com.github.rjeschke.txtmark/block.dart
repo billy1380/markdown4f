@@ -30,19 +30,19 @@ class Block {
   BlockType type = BlockType.NONE;
 
   /// Head and tail of linked lines.
-  Line lines, lineTail;
+  Line? lines, lineTail;
 
   /// Head and tail of child blocks.
-  Block blocks, blockTail;
+  Block? blocks, blockTail;
 
   /// Next block.
-  Block next;
+  Block? next;
 
   /// Depth of headline BlockType.
   int hlDepth = 0;
 
   /// ID for headlines and list items
-  String id;
+  String? id;
 
   /// Block meta information
   String meta = "";
@@ -75,7 +75,7 @@ class Block {
   void transfromHeadline() {
     if (this.hlDepth > 0) return;
     int level = 0;
-    final Line line = this.lines;
+    final Line line = this.lines!;
     if (line.isEmpty) return;
     int start = line.leading;
     while (start < line.value.length && line.value[start] == "#") {
@@ -102,7 +102,7 @@ class Block {
   ///            Whether extended profile ist activated or not
   ///
   void removeListIndent(bool extendedMode) {
-    Line line = this.lines;
+    Line? line = this.lines;
     while (line != null) {
       if (!line.isEmpty) {
         switch (line.getLineType(extendedMode)) {
@@ -126,7 +126,7 @@ class Block {
   /// Used for nested block quotes. Removes '>' char.
   ///
   void removeBlockQuotePrefix() {
-    Line line = this.lines;
+    Line? line = this.lines;
     while (line != null) {
       if (!line.isEmpty) {
         if (line.value[line.leading] == ">") {
@@ -148,7 +148,7 @@ class Block {
   ///
   bool removeLeadingEmptyLines() {
     bool wasEmpty = false;
-    Line line = this.lines;
+    Line? line = this.lines;
     while (line != null && line.isEmpty) {
       this.removeLine(line);
       line = this.lines;
@@ -161,7 +161,7 @@ class Block {
   /// Removes trailing empty lines.
   ///
   void removeTrailingEmptyLines() {
-    Line line = this.lineTail;
+    Line? line = this.lineTail;
     while (line != null && line.isEmpty) {
       this.removeLine(line);
       line = this.lineTail;
@@ -186,12 +186,12 @@ class Block {
     if (this.lines == null)
       this.lineTail = null;
     else
-      this.lines.previous = null;
+      this.lines!.previous = null;
 
     if (this.blocks == null)
       this.blocks = this.blockTail = block;
     else {
-      this.blockTail.next = block;
+      this.blockTail!.next = block;
       this.blockTail = block;
     }
 
@@ -208,11 +208,11 @@ class Block {
     if (line.previous == null)
       this.lines = line.next;
     else
-      line.previous.next = line.next;
+      line.previous!.next = line.next;
     if (line.next == null)
       this.lineTail = line.previous;
     else
-      line.next.previous = line.previous;
+      line.next!.previous = line.previous;
     line.previous = line.next = null;
   }
 
@@ -226,10 +226,10 @@ class Block {
     if (this.lineTail == null)
       this.lines = this.lineTail = line;
     else {
-      this.lineTail.nextEmpty = line.isEmpty;
-      line.prevEmpty = this.lineTail.isEmpty;
+      this.lineTail!.nextEmpty = line.isEmpty;
+      line.prevEmpty = this.lineTail!.isEmpty;
       line.previous = this.lineTail;
-      this.lineTail.next = line;
+      this.lineTail!.next = line;
       this.lineTail = line;
     }
   }
@@ -243,7 +243,7 @@ class Block {
         this.type != BlockType.UNORDERED_LIST) {
       return;
     }
-    Block outer = this.blocks, inner;
+    Block? outer = this.blocks, inner;
     bool hasParagraph = false;
     while (outer != null && !hasParagraph) {
       if (outer.type == BlockType.LIST_ITEM) {
