@@ -182,22 +182,22 @@ class Emitter {
   void _emitLines(final StringBuffer out, final Block block) {
     switch (block.type) {
       case BlockType.CODE:
-        this._emitCodeLines(out, block.lines!, block.meta, true);
+        this._emitCodeLines(out, block.lines, block.meta, true);
         break;
       case BlockType.FENCED_CODE:
-        this._emitCodeLines(out, block.lines!, block.meta, false);
+        this._emitCodeLines(out, block.lines, block.meta, false);
         break;
       case BlockType.PLUGIN:
-        this.emitPluginLines(out, block.lines!, block.meta);
+        this.emitPluginLines(out, block.lines, block.meta);
         break;
       case BlockType.XML:
-        this._emitRawLines(out, block.lines!);
+        this._emitRawLines(out, block.lines);
         break;
       case BlockType.PARAGRAPH:
-        this._emitMarkedLines(out, block.lines!);
+        this._emitMarkedLines(out, block.lines);
         break;
       default:
-        this._emitMarkedLines(out, block.lines!);
+        this._emitMarkedLines(out, block.lines);
         break;
     }
   }
@@ -814,7 +814,7 @@ class Emitter {
   /// @param lines
   ///            The lines to write.
   ///
-  void _emitMarkedLines(final StringBuffer out, final Line lines) {
+  void _emitMarkedLines(final StringBuffer out, final Line? lines) {
     final StringBuffer input = StringBuffer();
     Line? line = lines;
     while (line != null) {
@@ -843,7 +843,7 @@ class Emitter {
   /// @param lines
   ///            The lines to write.
   ///
-  void _emitRawLines(final StringBuffer out, final Line lines) {
+  void _emitRawLines(final StringBuffer out, final Line? lines) {
     Line? line = lines;
     if (this._config.safeMode) {
       final StringBuffer temp = StringBuffer();
@@ -891,7 +891,7 @@ class Emitter {
   /// @param meta
   ///            Meta information.
   ///
-  void _emitCodeLines(final StringBuffer out, final Line lines,
+  void _emitCodeLines(final StringBuffer out, final Line? lines,
       final String meta, final bool removeIndent) {
     Line? line = lines;
     if (this._config.codeBlockEmitter != null) {
@@ -942,7 +942,7 @@ class Emitter {
   ///            Meta information.
   ///
   void emitPluginLines(
-      final StringBuffer out, final Line lines, final String meta) {
+      final StringBuffer out, final Line? lines, final String meta) {
     Line? line = lines;
 
     String idPlugin = meta;
