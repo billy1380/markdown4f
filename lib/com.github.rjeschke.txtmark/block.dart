@@ -17,8 +17,8 @@
 import 'dart:math';
 
 import 'package:markdown4f/com.github.rjeschke.txtmark/line.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/blocktype.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/linetype.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/block_type.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/line_type.dart';
 
 ///
 /// This class represents a block of lines.

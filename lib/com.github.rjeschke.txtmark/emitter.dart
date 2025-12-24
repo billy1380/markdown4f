@@ -15,14 +15,14 @@
  */
 
 import 'package:markdown4f/com.github.rjeschke.txtmark/block.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/blocktype.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/block_type.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/configuration.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/html.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/line.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/linkref.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/markdownutils.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/marktoken.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/stringutils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/link_ref.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/markdown_utils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/mark_token.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/string_utils.dart';
 import 'package:markdown4f/org.markdown4j/plugin.dart';
 
 ///
@@ -79,7 +79,7 @@ class Emitter {
   /// @param root
   ///            The Block to process.
   ///
-  void emit(final StringBuffer out, final Block root) {
+  Future<void> emit(final StringBuffer out, final Block root) async {
     root.removeSurroundingEmptyLines();
 
     switch (root.type) {
@@ -129,11 +129,11 @@ class Emitter {
     }
 
     if (root.hasLines() || root.type == BlockType.PLUGIN) {
-      this._emitLines(out, root);
+      await this._emitLines(out, root);
     } else {
       Block? block = root.blocks;
       while (block != null) {
-        this.emit(out, block);
+        await this.emit(out, block);
         block = block.next;
       }
     }
@@ -179,7 +179,7 @@ class Emitter {
   /// @param block
   ///            The Block to process.
   ///
-  void _emitLines(final StringBuffer out, final Block block) {
+  Future<void> _emitLines(final StringBuffer out, final Block block) async {
     switch (block.type) {
       case BlockType.CODE:
         this._emitCodeLines(out, block.lines, block.meta, true);
@@ -188,7 +188,7 @@ class Emitter {
         this._emitCodeLines(out, block.lines, block.meta, false);
         break;
       case BlockType.PLUGIN:
-        this.emitPluginLines(out, block.lines, block.meta);
+        await this.emitPluginLines(out, block.lines, block.meta);
         break;
       case BlockType.XML:
         this._emitRawLines(out, block.lines);
@@ -941,8 +941,8 @@ class Emitter {
   /// @param meta
   ///            Meta information.
   ///
-  void emitPluginLines(
-      final StringBuffer out, final Line? lines, final String meta) {
+  Future<void> emitPluginLines(
+      final StringBuffer out, final Line? lines, final String meta) async {
     Line? line = lines;
 
     String idPlugin = meta;
@@ -969,7 +969,7 @@ class Emitter {
 
     Plugin? plugin = _plugins[idPlugin];
     if (plugin != null) {
-      plugin.emit(out, list, params);
+      await plugin.emit(out, list, params);
     }
   }
 }

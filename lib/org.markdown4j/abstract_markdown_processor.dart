@@ -1,12 +1,12 @@
 import 'package:markdown4f/com.github.rjeschke.txtmark/configuration.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/emojiemitter.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/emoji_emitter.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/processor.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/spanemitter.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/stringutils.dart';
-import 'package:markdown4f/org.markdown4j/codeblockemitter.dart';
-import 'package:markdown4f/org.markdown4j/extdecorator.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/span_emitter.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/string_utils.dart';
+import 'package:markdown4f/org.markdown4j/code_block_emitter.dart';
+import 'package:markdown4f/org.markdown4j/ext_decorator.dart';
 import 'package:markdown4f/org.markdown4j/plugin.dart';
-import 'package:markdown4f/org.markdown4j/yumlplugin.dart';
+import 'package:markdown4f/org.markdown4j/yuml_plugin.dart';
 
 abstract class AbstractMarkdownProcessor {
   late Builder _builder;
@@ -67,11 +67,11 @@ abstract class AbstractMarkdownProcessor {
     return this;
   }
 
-  String processReader(Reader reader) {
+  Future<String> processReader(Reader reader) async {
     return Processor.processReaderWithConfig(reader, _builder.build());
   }
 
-  String processString(String input) {
+  Future<String> processString(String input) async {
     return Processor.processStringWithConfig(input, _builder.build());
   }
 }

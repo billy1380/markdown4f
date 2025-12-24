@@ -15,9 +15,9 @@
  */
 
 import 'package:markdown4f/com.github.rjeschke.txtmark/html.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/linetype.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/markdownutils.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/stringutils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/line_type.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/markdown_utils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/string_utils.dart';
 
 ///
 /// This class represents a text line.

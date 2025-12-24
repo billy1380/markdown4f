@@ -16,7 +16,7 @@
 
 import 'dart:math';
 import 'package:markdown4f/com.github.rjeschke.txtmark/html.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/stringutils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/string_utils.dart';
 
 /// Utilities.
 ///
@@ -47,16 +47,16 @@ class MarkdownUtils {
   }
 
   ///
-	/// Processed the given escape sequence.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param ch
-	///            The character.
-	/// @param pos
-	///            Current parsing position.
-	/// @return The new position.
-	///
+  /// Processed the given escape sequence.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param ch
+  ///            The character.
+  /// @param pos
+  ///            Current parsing position.
+  /// @return The new position.
+  ///
   static int escape(final StringBuffer out, final String ch, final int pos) {
     switch (ch) {
       case '\\':
@@ -89,18 +89,18 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads characters until any 'end' character is encountered.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            The Input String.
-	/// @param start
-	///            Starting position.
-	/// @param end
-	///            End characters.
-	/// @return The new position or -1 if no 'end' char was found.
-	///
+  /// Reads characters until any 'end' character is encountered.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            The Input String.
+  /// @param start
+  ///            Starting position.
+  /// @param end
+  ///            End characters.
+  /// @return The new position or -1 if no 'end' char was found.
+  ///
   static int readUntilAnyEnd(final StringBuffer out, final String input,
       final int start, final List<String> end) {
     int pos = start;
@@ -126,18 +126,18 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads characters until the 'end' character is encountered.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            The Input String.
-	/// @param start
-	///            Starting position.
-	/// @param end
-	///            End characters.
-	/// @return The new position or -1 if no 'end' char was found.
-	//
+  /// Reads characters until the 'end' character is encountered.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            The Input String.
+  /// @param start
+  ///            Starting position.
+  /// @param end
+  ///            End characters.
+  /// @return The new position or -1 if no 'end' char was found.
+  //
   static int readUntil(final StringBuffer out, final String input,
       final int start, final String end) {
     int pos = start;
@@ -156,16 +156,16 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads a markdown link.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	/// @param start
-	///            Starting position.
-	/// @return The new position or -1 if this is no valid markdown link.
-	///
+  /// Reads a markdown link.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  /// @param start
+  ///            Starting position.
+  /// @return The new position or -1 if this is no valid markdown link.
+  ///
   static int readMdLink(
       final StringBuffer out, final String input, final int start) {
     int pos = start;
@@ -198,16 +198,16 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads a markdown link ID.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	/// @param start
-	///            Starting position.
-	/// @return The new position or -1 if this is no valid markdown link ID.
-	///
+  /// Reads a markdown link ID.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  /// @param start
+  ///            Starting position.
+  /// @return The new position or -1 if this is no valid markdown link ID.
+  ///
   static int readMdLinkId(
       final StringBuffer out, final String input, final int start) {
     int pos = start;
@@ -242,18 +242,18 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads characters until any 'end' character is encountered, ignoring escape sequences.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            The Input String.
-	/// @param start
-	///            Starting position.
-	/// @param end
-	///            End characters.
-	/// @return The new position or -1 if no 'end' char was found.
-	///
+  /// Reads characters until any 'end' character is encountered, ignoring escape sequences.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            The Input String.
+  /// @param start
+  ///            Starting position.
+  /// @param end
+  ///            End characters.
+  /// @return The new position or -1 if no 'end' char was found.
+  ///
   static int readRawUntilAnyEnd(final StringBuffer out, final String input,
       final int start, final List<String> end) {
     int pos = start;
@@ -275,18 +275,18 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads characters until the end character is encountered, ignoring escape sequences.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            The Input String.
-	/// @param start
-	///            Starting position.
-	/// @param end
-	///            End characters.
-	/// @return The new position or -1 if no 'end' char was found.
-	///
+  /// Reads characters until the end character is encountered, ignoring escape sequences.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            The Input String.
+  /// @param start
+  ///            Starting position.
+  /// @param end
+  ///            End characters.
+  /// @return The new position or -1 if no 'end' char was found.
+  ///
   static int readRawUntil(final StringBuffer out, final String input,
       final int start, final String end) {
     int pos = start;
@@ -301,17 +301,17 @@ class MarkdownUtils {
   }
 
   ///
-	/// Appends the given string encoding special HTML characters.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	/// @param start
-	///            Input String starting position.
-	/// @param end
-	///            Input String end position.
-	///
+  /// Appends the given string encoding special HTML characters.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  /// @param start
+  ///            Input String starting position.
+  /// @param end
+  ///            Input String end position.
+  ///
   static void appendCode(final StringBuffer out, final String input,
       final int start, final int end) {
     for (int i = start; i < end; i++) {
@@ -334,17 +334,17 @@ class MarkdownUtils {
   }
 
   ///
-	/// Appends the given string encoding special HTML characters (used in HTML attribute values).
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	/// @param start
-	///            Input String starting position.
-	/// @param end
-	///            Input String end position.
-	///
+  /// Appends the given string encoding special HTML characters (used in HTML attribute values).
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  /// @param start
+  ///            Input String starting position.
+  /// @param end
+  ///            Input String end position.
+  ///
   static void appendValue(final StringBuffer out, final String input,
       final int start, final int end) {
     for (int i = start; i < end; i++) {
@@ -373,13 +373,13 @@ class MarkdownUtils {
   }
 
   ///
-	/// Append the given char as a decimal HTML entity.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param value
-	///            The character.
-	///
+  /// Append the given char as a decimal HTML entity.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param value
+  ///            The character.
+  ///
   static void appendDecEntity(final StringBuffer out, final String value) {
     out.write("&#");
     for (int i in value.codeUnits) {
@@ -389,13 +389,13 @@ class MarkdownUtils {
   }
 
   ///
-	/// Append the given char as a hexadecimal HTML entity.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param value
-	///            The character.
-	///
+  /// Append the given char as a hexadecimal HTML entity.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param value
+  ///            The character.
+  ///
   static void appendHexEntity(final StringBuffer out, final String value) {
     out.write("&#x");
     for (int i in value.codeUnits) {
@@ -405,17 +405,17 @@ class MarkdownUtils {
   }
 
   ///
-	/// Appends the given mailto link using obfuscation.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	/// @param start
-	///            Input String starting position.
-	/// @param end
-	///            Input String end position.
-	///
+  /// Appends the given mailto link using obfuscation.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  /// @param start
+  ///            Input String starting position.
+  /// @param end
+  ///            Input String end position.
+  ///
   static void appendMailto(final StringBuffer out, final String input,
       final int start, final int end) {
     for (int i = start; i < end; i++) {
@@ -446,13 +446,13 @@ class MarkdownUtils {
   }
 
   ///
-	/// Extracts the tag from an XML element.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input StringBuffer.
-	///
+  /// Extracts the tag from an XML element.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input StringBuffer.
+  ///
   static void getXMLTag(final StringBuffer out, final StringBuffer input) {
     int pos = 1;
     String inputString = input.toString();
@@ -463,13 +463,13 @@ class MarkdownUtils {
   }
 
   ///
-	/// Extracts the tag from an XML element.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	///
+  /// Extracts the tag from an XML element.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  ///
   static void getXMLTagString(final StringBuffer out, final String input) {
     int pos = 1;
     if (input[1] == '/') pos++;
@@ -479,18 +479,18 @@ class MarkdownUtils {
   }
 
   ///
-	/// Reads an XML element.
-	/// 
-	/// @param out
-	///            The StringBuffer to write to.
-	/// @param in
-	///            Input String.
-	/// @param start
-	///            Starting position.
-	/// @param safeMode
-	///            Whether to escape unsafe HTML tags or not
-	/// @return The new position or -1 if this is no valid XML element.
-	///
+  /// Reads an XML element.
+  ///
+  /// @param out
+  ///            The StringBuffer to write to.
+  /// @param in
+  ///            Input String.
+  /// @param start
+  ///            Starting position.
+  /// @param safeMode
+  ///            Whether to escape unsafe HTML tags or not
+  /// @return The new position or -1 if this is no valid XML element.
+  ///
   static int readXML(final StringBuffer out, final String input,
       final int start, final bool safeMode) {
     int pos;
@@ -539,15 +539,15 @@ class MarkdownUtils {
   }
 
   ///
-	/// Appends the given string to the given StringBuffer, replacing '&amp;', '&lt;' and '&gt;' by their respective HTML entities.
-	/// 
-	/// @param out
-	///            The StringBuffer to append to.
-	/// @param value
-	///            The string to append.
-	/// @param offset
-	///            The character offset into value from where to start
-	///
+  /// Appends the given string to the given StringBuffer, replacing '&amp;', '&lt;' and '&gt;' by their respective HTML entities.
+  ///
+  /// @param out
+  ///            The StringBuffer to append to.
+  /// @param value
+  ///            The string to append.
+  /// @param offset
+  ///            The character offset into value from where to start
+  ///
   static void codeEncode(StringBuffer out, String value, int offset) {
     for (int i = offset; i < value.length; i++) {
       final String c = value[i];
@@ -568,13 +568,13 @@ class MarkdownUtils {
   }
 
   ///
-	/// Removes trailing <code>`</code> and trims spaces.
-	/// 
-	/// @param fenceLine
-	///            Fenced code block starting line
-	/// @return Rest of the line after trimming and backtick removal
-	/// @since 0.7
-	///
+  /// Removes trailing <code>`</code> and trims spaces.
+  ///
+  /// @param fenceLine
+  ///            Fenced code block starting line
+  /// @return Rest of the line after trimming and backtick removal
+  /// @since 0.7
+  ///
   static String getMetaFromFence(String fenceLine) {
     for (int i = 0; i < fenceLine.length; i++) {
       final String c = fenceLine[i];
@@ -586,11 +586,11 @@ class MarkdownUtils {
   }
 
   ///
-	/// Convert space delimited key=value parameters into a map
-	/// 
-	/// @param s
-	/// @return
-	///
+  /// Convert space delimited key=value parameters into a map
+  ///
+  /// @param s
+  /// @return
+  ///
   static Map<String, String> parseParams(String s) {
     Map<String, String> params = <String, String>{};
     RegExp regExp = RegExp("(\\w+)=((?=\")[^\"]+(?=\")|([^\\s]+))");

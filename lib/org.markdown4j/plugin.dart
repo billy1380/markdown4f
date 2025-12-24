@@ -3,7 +3,8 @@ abstract class Plugin {
 
   Plugin(this._idPlugin);
 
-  void emit(StringBuffer out, List<String> lines, Map<String, String> params);
+  Future<void> emit(
+      StringBuffer out, List<String> lines, Map<String, String> params);
 
   String get idPlugin {
     return _idPlugin;

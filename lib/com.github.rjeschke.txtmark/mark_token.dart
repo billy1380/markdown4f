@@ -16,12 +16,13 @@
 
 ///
 /// Markdown token enumeration.
-/// 
+///
 /// @author René Jeschke <rene_jeschke@yahoo.de>
 ///
 enum MarkToken {
   /// No token.
   NONE,
+
   /// &#x2a;
   EM_STAR, // x*x
   /// _
@@ -70,9 +71,8 @@ enum MarkToken {
   X_LDQUO, // "
   /// [[
   X_LINK_OPEN, // [[
-  /// ]] 
+  /// ]]
   X_LINK_CLOSE, // ]]
   /// :
   EMOJI, // :
-
 }

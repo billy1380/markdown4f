@@ -1,4 +1,4 @@
-import 'package:markdown4f/com.github.rjeschke.txtmark/blockemitter.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/block_emitter.dart';
 
 class CodeBlockEmitter implements BlockEmitter {
   @override

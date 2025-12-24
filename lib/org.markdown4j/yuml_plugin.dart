@@ -4,8 +4,8 @@ class YumlPlugin extends Plugin {
   YumlPlugin() : super("yuml");
 
   @override
-  void emit(final StringBuffer out, final List<String> lines,
-      final Map<String, String> params) {
+  Future<void> emit(final StringBuffer out, final List<String> lines,
+      final Map<String, String> params) async {
     StringBuffer sb2 = StringBuffer();
     for (String line in lines) {
       line = line.trim();

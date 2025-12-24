@@ -1,6 +1,6 @@
 import 'package:markdown4f/com.github.rjeschke.txtmark/block.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/defaultdecorator.dart';
-import 'package:markdown4f/org.markdown4j/htmlattributes.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/default_decorator.dart';
+import 'package:markdown4f/org.markdown4j/html_attributes.dart';
 
 class ExtDecorator extends DefaultDecorator {
   HtmlAttributes _attributes = HtmlAttributes();

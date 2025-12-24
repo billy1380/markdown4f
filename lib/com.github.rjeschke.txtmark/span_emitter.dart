@@ -16,15 +16,14 @@
 
 /// An interface for emitting span elements. Currently only used for special
 /// links.
-/// 
+///
 /// @author René Jeschke (rene_jeschke@yahoo.de)
-abstract class SpanEmitter
-{
-    /// Emits a span element.
-    /// 
-    /// @param out
-    ///            The StringBuffer to append to.
-    /// @param content
-    ///            The span's content.
-    void emitSpan(StringBuffer out, String content);
+abstract class SpanEmitter {
+  /// Emits a span element.
+  ///
+  /// @param out
+  ///            The StringBuffer to append to.
+  /// @param content
+  ///            The span's content.
+  void emitSpan(StringBuffer out, String content);
 }

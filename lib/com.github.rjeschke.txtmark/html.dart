@@ -16,7 +16,7 @@
 
 import 'dart:collection';
 
-import 'package:markdown4f/com.github.rjeschke.txtmark/htmlelement.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/html_element.dart';
 
 /// HTML utility class.
 ///

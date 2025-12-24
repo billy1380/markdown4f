@@ -15,15 +15,15 @@
  */
 
 import 'package:markdown4f/com.github.rjeschke.txtmark/block.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/blocktype.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/block_type.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/configuration.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/decorator.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/emitter.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/line.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/linetype.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/linkref.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/markdownutils.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/stringutils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/line_type.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/link_ref.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/markdown_utils.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/string_utils.dart';
 
 /// Markdown processor class.
 ///
@@ -67,8 +67,8 @@ class Processor {
   /// @return The processed String.
   /// @since 0.7
   /// @see Configuration
-  static String processReaderWithConfig(
-      final Reader reader, final Configuration configuration) {
+  static Future<String> processReaderWithConfig(
+      final Reader reader, final Configuration configuration) async {
     final Processor p = Processor(reader, configuration);
     return p._process();
   }
@@ -82,8 +82,8 @@ class Processor {
   /// @return The processed String.
   /// @since 0.7
   /// @see Configuration`
-  static String processStringWithConfig(
-      final String input, final Configuration configuration) {
+  static Future<String> processStringWithConfig(
+      final String input, final Configuration configuration) async {
     try {
       return processReaderWithConfig(StringReader(input), configuration);
     } on Exception {
@@ -98,7 +98,7 @@ class Processor {
   ///            The String to process.
   /// @return The processed String.
   /// @see Configuration#DEFAULT
-  static String processString(final String input) {
+  static Future<String> processString(final String input) async {
     return processStringWithConfig(input, Configuration.defaultConfig);
   }
 
@@ -110,8 +110,8 @@ class Processor {
   ///            Set to <code>true</code> to escape unsafe HTML tags.
   /// @return The processed String.
   /// @see Configuration#DEFAULT
-  static String processStringWithSafeMode(
-      final String input, final bool safeMode) {
+  static Future<String> processStringWithSafeMode(
+      final String input, final bool safeMode) async {
     return processStringWithConfig(
         input, Configuration.builder().setSafeMode(safeMode).build());
   }
@@ -124,8 +124,8 @@ class Processor {
   ///            The decorator to use.
   /// @return The processed String.
   /// @see Configuration#DEFAULT
-  static String processStringWithDecorator(
-      final String input, final Decorator decorator) {
+  static Future<String> processStringWithDecorator(
+      final String input, final Decorator decorator) async {
     return processStringWithConfig(
         input, Configuration.builder().setDecorator(decorator).build());
   }
@@ -140,8 +140,10 @@ class Processor {
   ///            Set to <code>true</code> to escape unsafe HTML tags.
   /// @return The processed String.
   /// @see Configuration#DEFAULT
-  static String processStringWithDecoratorAndSafeMode(
-      final String input, final Decorator decorator, final bool safeMode) {
+  static Future<String> processStringWithDecoratorAndSafeMode(
+      final String input,
+      final Decorator decorator,
+      final bool safeMode) async {
     return processStringWithConfig(
         input,
         Configuration.builder()
@@ -157,7 +159,7 @@ class Processor {
   /// @return The processed String.
   ///
   /// @see Configuration#defaultConfig
-  static String processReader(final Reader reader) {
+  static Future<String> processReader(final Reader reader) async {
     return processReaderWithConfig(reader, Configuration.defaultConfig);
   }
 
@@ -170,8 +172,8 @@ class Processor {
   /// @return The processed String.
   ///
   /// @see Configuration#defaultConfig
-  static String processReaderWidthSafeMode(
-      final Reader reader, final bool safeMode) {
+  static Future<String> processReaderWidthSafeMode(
+      final Reader reader, final bool safeMode) async {
     return processReaderWithConfig(
         reader, Configuration.builder().setSafeMode(safeMode).build());
   }
@@ -185,8 +187,8 @@ class Processor {
   /// @return The processed String.
   ///
   /// @see Configuration#defaultConfig
-  static String processReaderWithDecorator(
-      final Reader reader, final Decorator decorator) {
+  static Future<String> processReaderWithDecorator(
+      final Reader reader, final Decorator decorator) async {
     return processReaderWithConfig(
         reader, Configuration.builder().setDecorator(decorator).build());
   }
@@ -202,8 +204,10 @@ class Processor {
   /// @return The processed String.
   ///
   /// @see Configuration#defaultConfig
-  static String processReaderWithDecoratorAndSafeMode(
-      final Reader reader, final Decorator decorator, final bool safeMode) {
+  static Future<String> processReaderWithDecoratorAndSafeMode(
+      final Reader reader,
+      final Decorator decorator,
+      final bool safeMode) async {
     return processReaderWithConfig(
         reader,
         Configuration.builder()
@@ -561,7 +565,7 @@ class Processor {
   ///
   /// @return The processed String.
   ///
-  String _process() {
+  Future<String> _process() async {
     final StringBuffer out = StringBuffer();
     final Block parent = this._readLines();
     parent.removeSurroundingEmptyLines();
@@ -569,7 +573,7 @@ class Processor {
     this._recurse(parent, false);
     Block? block = parent.blocks;
     while (block != null) {
-      this._emitter.emit(out, block);
+      await this._emitter.emit(out, block);
       block = block.next;
     }
 

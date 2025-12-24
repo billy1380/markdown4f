@@ -16,7 +16,7 @@
 
 ///
 /// Block emitter interface. An example for a code block emitter is given below:
-/// 
+///
 /// <pre>
 /// <code>public void emitBlock(StringBuffer out, List&lt;String&gt; lines, String meta)
 /// {
@@ -48,22 +48,22 @@
 /// }
 /// </code>
 /// </pre>
-/// 
-/// 
+///
+///
 /// @author René Jeschke <rene_jeschke@yahoo.de>
 /// @since 0.7
 ///
 abstract class BlockEmitter {
   ///
-    /// This method is responsible for outputting a markdown block and for any
-    /// needed pre-processing like escaping HTML special characters.
-    /// 
-    /// @param out
-    ///            The StringBuffer to append to
-    /// @param lines
-    ///            List of lines
-    /// @param meta
-    ///            Meta information as a single String (if any) or empty String
-    ///
+  /// This method is responsible for outputting a markdown block and for any
+  /// needed pre-processing like escaping HTML special characters.
+  ///
+  /// @param out
+  ///            The StringBuffer to append to
+  /// @param lines
+  ///            List of lines
+  /// @param meta
+  ///            Meta information as a single String (if any) or empty String
+  ///
   void emitBlock(StringBuffer out, List<String> lines, String meta);
 }

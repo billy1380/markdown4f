@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import 'package:markdown4f/com.github.rjeschke.txtmark/blockemitter.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/block_emitter.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/decorator.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/defaultdecorator.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/emojiemitter.dart';
-import 'package:markdown4f/com.github.rjeschke.txtmark/spanemitter.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/default_decorator.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/emoji_emitter.dart';
+import 'package:markdown4f/com.github.rjeschke.txtmark/span_emitter.dart';
 import 'package:markdown4f/org.markdown4j/plugin.dart';
 
 ///
@@ -252,7 +252,7 @@ class Builder {
     for (Plugin plugin in plugins) {
       this._plugins.add(plugin);
     }
-    
+
     return this;
   }
 
