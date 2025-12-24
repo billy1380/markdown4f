@@ -443,10 +443,11 @@ class Processor {
           break;
         case LineType.XML:
           if (line.previous != null) {
-            // FIXME ... this looks wrong
             root.split(line.previous!);
           }
-          root.split(line.xmlEndLine!).type = BlockType.XML;
+          if (root.lineTail != null) {
+            root.split(line.xmlEndLine!).type = BlockType.XML;
+          }
           root.removeLeadingEmptyLines();
           line = root.lines;
           break;
@@ -468,10 +469,11 @@ class Processor {
           break;
         case LineType.HR:
           if (line.previous != null) {
-            // FIXME ... this looks wrong
             root.split(line.previous!);
           }
-          root.split(line).type = BlockType.RULER;
+          if (root.lineTail != null) {
+            root.split(line).type = BlockType.RULER;
+          }
           root.removeLeadingEmptyLines();
           line = root.lines;
           break;
@@ -480,8 +482,7 @@ class Processor {
           while (line != null) {
             if (line.getLineType(this._useExtensions) == LineType.FENCED_CODE)
               break;
-            // TODO ... is this really necessary? Maybe add a special
-            // flag?
+
             line = line.next;
           }
           if (line != null) line = line.next;
@@ -497,8 +498,7 @@ class Processor {
           line = line.next;
           while (line != null) {
             if (line.getLineType(this._useExtensions) == LineType.PLUGIN) break;
-            // TODO ... is this really necessary? Maybe add a special
-            // flag?
+
             line = line.next;
           }
           if (line != null) line = line.next;

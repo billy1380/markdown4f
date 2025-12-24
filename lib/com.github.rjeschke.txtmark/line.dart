@@ -86,11 +86,13 @@ class Line {
   ///
   /// @return <code>false</code> if end of line is reached
   ///
-  // TODO use Util#skipSpaces
   bool skipSpaces() {
-    while (this.pos < this.value.length && this.value[this.pos] == ' ')
-      this.pos++;
-    return this.pos < this.value.length;
+    int newPos = MarkdownUtils.skipSpaces(this.value, this.pos);
+    if (newPos != -1) {
+      this.pos = newPos;
+      return true;
+    }
+    return false;
   }
 
   ///
@@ -101,61 +103,12 @@ class Line {
   /// @return The read String or <code>null</code> if no 'end' char was
   ///         reached.
   ///
-  // TODO use Util#readUntil
   String? readUntil(List<String> end) {
     final StringBuffer sb = StringBuffer();
-    int pos = this.pos;
-    while (pos < this.value.length) {
-      final String ch = this.value[pos];
-      if (ch == '\\' && pos + 1 < this.value.length) {
-        final String c = this.value[pos + 1];
-        switch (c) {
-          case '\\':
-          case '[':
-          case ']':
-          case '(':
-          case ')':
-          case '{':
-          case '}':
-          case '#':
-          case '"':
-          case '\'':
-          case '.':
-          case '>':
-          case '*':
-          case '+':
-          case '-':
-          case '_':
-          case '!':
-          case '`':
-          case ':':
-            sb.write(c);
-            pos++;
-            break;
-          default:
-            sb.write(ch);
-            break;
-        }
-      } else {
-        bool endReached = false;
-        for (int n = 0; n < end.length; n++) {
-          if (ch == end[n]) {
-            endReached = true;
-            break;
-          }
-        }
-        if (endReached) break;
-        sb.write(ch);
-      }
-      pos++;
-    }
-
-    final String ch = pos < this.value.length ? this.value[pos] : '\n';
-    for (int n = 0; n < end.length; n++) {
-      if (ch == end[n]) {
-        this.pos = pos;
-        return sb.toString();
-      }
+    int newPos = MarkdownUtils.readUntilAnyEnd(sb, this.value, this.pos, end);
+    if (newPos != -1) {
+      this.pos = newPos;
+      return sb.toString();
     }
     return null;
   }
@@ -325,68 +278,27 @@ class Line {
   ///
   /// @return The ID or <code>null</code> if no valid ID exists.
   ///
-  // FIXME ... hack
   String? stripID() {
-    if (this.isEmpty ||
-        this.value[this.value.length - this.trailing - 1] != '}') return null;
-    int p = this.leading;
-    bool found = false;
-    while (p < this.value.length && !found) {
-      switch (this.value[p]) {
-        case '\\':
-          if (p + 1 < this.value.length) {
-            switch (this.value[p + 1]) {
-              case '{':
-                p++;
-                break;
-            }
-          }
-          p++;
-          break;
-        case '{':
-          found = true;
-          break;
-        default:
-          p++;
-          break;
-      }
-    }
+    if (this.isEmpty) return null;
 
-    if (found) {
-      if (p + 1 < this.value.length && this.value[p + 1] == '#') {
-        final int start = p + 2;
-        p = start;
-        found = false;
-        while (p < this.value.length && !found) {
-          switch (this.value[p]) {
-            case '\\':
-              if (p + 1 < this.value.length) {
-                switch (this.value[p + 1]) {
-                  case '}':
-                    p++;
-                    break;
-                }
-              }
-              p++;
-              break;
-            case '}':
-              found = true;
-              break;
-            default:
-              p++;
-              break;
-          }
-        }
-        if (found) {
-          final String id = this.value.substring(start, p).trim();
-          if (this.leading != 0) {
-            this.value = this.value.substring(0, this.leading) +
-                this.value.substring(this.leading, start - 2).trim();
-          } else {
-            this.value = this.value.substring(this.leading, start - 2).trim();
-          }
+    final RegExp trailingIdRegex = RegExp(r'\{\s*#([^}]+)\}\s*$');
+    final match = trailingIdRegex.firstMatch(this.value);
+
+    if (match != null) {
+      // Check for escaping (odd number of backslashes before the match)
+      int backslashes = 0;
+      int idx = match.start - 1;
+      while (idx >= 0 && this.value[idx] == '\\') {
+        backslashes++;
+        idx--;
+      }
+
+      if (backslashes % 2 == 0) {
+        String id = match.group(1)!.trim();
+        if (id.isNotEmpty) {
+          this.value = this.value.substring(0, match.start).trimRight();
           this.trailing = 0;
-          return id.length > 0 ? id : null;
+          return id;
         }
       }
     }
