@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import 'dart:io';
-
 import 'package:markdown4f/com.github.rjeschke.txtmark/block.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/blocktype.dart';
 import 'package:markdown4f/com.github.rjeschke.txtmark/configuration.dart';
@@ -88,7 +86,7 @@ class Processor {
       final String input, final Configuration configuration) {
     try {
       return processReaderWithConfig(StringReader(input), configuration);
-    } on IOException {
+    } on Exception {
       // This _can never_ happen
       return "";
     }
