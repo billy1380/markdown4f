@@ -85,7 +85,7 @@ class Processor {
   static Future<String> processStringWithConfig(
       final String input, final Configuration configuration) async {
     try {
-      return processReaderWithConfig(StringReader(input), configuration);
+      return await processReaderWithConfig(StringReader(input), configuration);
     } on Exception {
       // This _can never_ happen
       return "";
@@ -478,6 +478,7 @@ class Processor {
           line = root.lines;
           break;
         case LineType.FENCED_CODE:
+          root.removeLeadingEmptyLines();
           line = line.next;
           while (line != null) {
             if (line.getLineType(this._useExtensions) == LineType.FENCED_CODE)
@@ -495,6 +496,7 @@ class Processor {
           block.removeSurroundingEmptyLines();
           break;
         case LineType.PLUGIN:
+          root.removeLeadingEmptyLines();
           line = line.next;
           while (line != null) {
             if (line.getLineType(this._useExtensions) == LineType.PLUGIN) break;
