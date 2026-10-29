@@ -9,6 +9,14 @@ void main() {
     expect(await processor.processString("#Hello"), "<h1>Hello</h1>\n");
   });
 
+  test("inline html keeps its attributes", () async {
+    final processor = MarkdownProcessor();
+    expect(
+        await processor.processString(
+            'a <a href="https://x.com/a/b?c:d:e">l</a> <img src="/i.png" /> <br/>'),
+        '<p>a <a href="https://x.com/a/b?c:d:e">l</a> <img src="/i.png" /> <br /></p>\n');
+  });
+
   test("table plugin", () async {
     final processor = MarkdownProcessor();
     String input = "%%% table\n| H1 | H2 |\n|---|---|\n| C1 | C2 |\n%%%";

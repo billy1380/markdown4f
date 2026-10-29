@@ -522,15 +522,25 @@ class MarkdownUtils {
         pos = readRawUntilAnyEnd(out, input, pos, [' ', '/', '>']);
       }
       if (pos == -1) return -1;
-      pos = readRawUntilAnyEnd(out, input[pos], pos, ['/', '>']);
-      if (input[pos] == '/') {
-        out.write(" /");
-        pos = readRawUntilAnyEnd(out, input[pos], pos + 1, ['>']);
-        if (pos == -1) return -1;
-      }
-      if (input[pos] == '>') {
-        out.write('>');
-        return pos;
+      // A '/' or '>' inside a quoted attribute value (a URL, say) must not end
+      // the tag.
+      String? quote;
+      while (pos < input.length) {
+        final String ch = input[pos];
+        if (quote != null) {
+          if (ch == quote) quote = null;
+        } else if (ch == '"' || ch == "'") {
+          quote = ch;
+        } else if (ch == '>') {
+          out.write('>');
+          return pos;
+        } else if (ch == '/' &&
+            pos + 1 < input.length &&
+            input[pos + 1] == '>') {
+          if (input[pos - 1] != ' ') out.write(' ');
+        }
+        out.write(ch);
+        pos++;
       }
     } on /* String out of bounds */ Exception {
       return -1;
