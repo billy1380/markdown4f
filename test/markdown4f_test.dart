@@ -17,6 +17,12 @@ void main() {
         '<p>a <a href="https://x.com/a/b?c:d:e">l</a> <img src="/i.png" /> <br /></p>\n');
   });
 
+  test("html tags without attributes do not throw", () async {
+    final processor = MarkdownProcessor();
+    expect(await processor.processString("<details>\n\nx\n"),
+        "<p><details></p>\n<p>x</p>\n");
+  });
+
   test("table plugin", () async {
     final processor = MarkdownProcessor();
     String input = "%%% table\n| H1 | H2 |\n|---|---|\n| C1 | C2 |\n%%%";

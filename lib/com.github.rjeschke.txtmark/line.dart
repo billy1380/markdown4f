@@ -314,6 +314,7 @@ class Line {
     final List<String> tags = <String>[];
     final StringBuffer temp = StringBuffer();
     int pos = this.leading;
+    if (pos + 1 >= this.value.length) return false;
     if (this.value[this.leading + 1] == '!') {
       if (this._readXMLComment(this, this.leading) > 0) return true;
     }

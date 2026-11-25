@@ -25,6 +25,8 @@ class MarkdownUtils {
   /// Random number generator value.
   static final Random _rnd = Random();
 
+  static final RegExp _tagNameChar = RegExp(r'[A-Za-z0-9]');
+
   /// LCG random number generator.
   ///
   /// @return A pseudo random number between 0 and 1023
@@ -454,12 +456,7 @@ class MarkdownUtils {
   ///            Input StringBuffer.
   ///
   static void getXMLTag(final StringBuffer out, final StringBuffer input) {
-    int pos = 1;
-    String inputString = input.toString();
-    if (inputString[1] == '/') pos++;
-    while (inputString[pos].isLetterOrDigit) {
-      out.write(inputString[pos++]);
-    }
+    getXMLTagString(out, input.toString());
   }
 
   ///
@@ -472,8 +469,8 @@ class MarkdownUtils {
   ///
   static void getXMLTagString(final StringBuffer out, final String input) {
     int pos = 1;
-    if (input[1] == '/') pos++;
-    while (input[pos].isLetterOrDigit) {
+    if (pos < input.length && input[pos] == '/') pos++;
+    while (pos < input.length && _tagNameChar.hasMatch(input[pos])) {
       out.write(input[pos++]);
     }
   }
