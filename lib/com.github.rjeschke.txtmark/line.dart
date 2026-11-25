@@ -326,7 +326,7 @@ class Line {
       MarkdownUtils.getXMLTagString(temp, element);
       tag = temp.toString().toLowerCase();
       if (!HTML.isHtmlBlockElement(tag)) return false;
-      if (tag == "hr") {
+      if (tag == "hr" || element.endsWith("/>")) {
         this.xmlEndLine = this;
         return true;
       }
@@ -338,7 +338,7 @@ class Line {
           pos++;
         }
         if (pos >= line.value.length) {
-          line = line.next!;
+          line = line.next;
           pos = 0;
         } else {
           temp.clear();
@@ -349,7 +349,9 @@ class Line {
             temp.clear();
             MarkdownUtils.getXMLTagString(temp, element);
             tag = temp.toString().toLowerCase();
-            if (HTML.isHtmlBlockElement(tag) && tag != "hr") {
+            if (HTML.isHtmlBlockElement(tag) &&
+                tag != "hr" &&
+                !element.endsWith("/>")) {
               if (element[1] == '/') {
                 if (tags.last != tag) return false;
                 tags.removeLast();

@@ -864,7 +864,7 @@ class Emitter {
             out.write(temp);
             pos = t;
           } else {
-            out.write(input[pos]);
+            out.write("&lt;");
           }
         } else {
           out.write(input[pos]);

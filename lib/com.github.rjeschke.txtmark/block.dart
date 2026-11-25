@@ -83,12 +83,12 @@ class Block {
       start++;
     }
     while (start < line.value.length && line.value[start] == " ") start++;
-    if (start >= line.value.length) {
+    int end = line.value.length - line.trailing - 1;
+    while (end >= start && line.value[end] == "#") end--;
+    while (end >= start && line.value[end] == " ") end--;
+    if (end < start) {
       line.setEmpty();
     } else {
-      int end = line.value.length - line.trailing - 1;
-      while (line.value[end] == "#") end--;
-      while (line.value[end] == " ") end--;
       line.value = line.value.substring(start, end + 1);
       line.leading = line.trailing = 0;
     }

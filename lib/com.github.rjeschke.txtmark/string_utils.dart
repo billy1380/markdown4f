@@ -1,3 +1,5 @@
+final RegExp _letterOrDigit = RegExp(r'^[\p{L}\p{Nd}]', unicode: true);
+
 extension StringUtils on String {
   bool operator <(String other) {
     return this.compareTo(other) < 0;
@@ -32,7 +34,7 @@ extension StringUtils on String {
   }
 
   bool get isLetterOrDigit {
-    return !isSpace;
+    return _letterOrDigit.hasMatch(this);
   }
 }
 

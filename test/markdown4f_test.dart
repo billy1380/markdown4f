@@ -9,6 +9,11 @@ void main() {
     expect(await processor.processString("#Hello"), "<h1>Hello</h1>\n");
   });
 
+  test("heading with only hashes is empty", () async {
+    final processor = MarkdownProcessor();
+    expect(await processor.processString("#    #"), "<h1></h1>\n");
+  });
+
   test("inline html keeps its attributes", () async {
     final processor = MarkdownProcessor();
     expect(
@@ -21,6 +26,37 @@ void main() {
     final processor = MarkdownProcessor();
     expect(await processor.processString("<details>\n\nx\n"),
         "<p><details></p>\n<p>x</p>\n");
+  });
+
+  test("html blocks pass through, unclosed ones do not throw", () async {
+    final processor = MarkdownProcessor();
+    expect(await processor.processString("<div>\nx\n</div>\n\n**b**\n"),
+        "<div>\nx\n</div>\n<p><strong>b</strong></p>\n");
+    expect(await processor.processString("<div>\nx\n"),
+        "<p><div>\n<br />x</p>\n");
+  });
+
+  test("markdown between details tags still renders", () async {
+    final processor = MarkdownProcessor();
+    expect(
+        await processor
+            .processString("<details>\n\n```\na < b\n```\n\n</details>\n"),
+        contains("<pre><code>a &lt; b\n</code></pre>"));
+  });
+
+  test("safe mode escapes only unsafe tags", () async {
+    Future<String> safe(String input) =>
+        Processor.processStringWithSafeMode(input, true);
+    expect(await safe("<b>x</b> <script>y</script>"),
+        "<p><b>x</b> &lt;script>y&lt;/script></p>\n");
+    expect(await safe("<div>\n<script\nsrc=s>\n</div>"),
+        "<div>\n&lt;script\nsrc=s>\n</div>\n");
+  });
+
+  test("underscores and quotes respect punctuation", () async {
+    final processor = MarkdownProcessor();
+    expect(await processor.processString('(_x_) a_b_c ("r")'),
+        "<p>(<em>x</em>) a_b_c (&ldquo;r&rdquo;)</p>\n");
   });
 
   test("table plugin", () async {

@@ -490,6 +490,7 @@ class MarkdownUtils {
   ///
   static int readXML(final StringBuffer out, final String input,
       final int start, final bool safeMode) {
+    if (start + 1 >= input.length) return -1;
     int pos;
     bool isCloseTag;
     try {
@@ -504,20 +505,17 @@ class MarkdownUtils {
         pos = start + 1;
       }
       if (safeMode) {
-        final StringBuffer temp = StringBuffer();
-        pos = readRawUntilAnyEnd(temp, input, pos, [' ', '/', '>']);
-        if (pos == -1) return -1;
-        final String tag = temp.toString().trim().toLowerCase();
-        if (HTML.isUnsafeHtmlElement(tag)) {
-          out.write("&lt;");
-          if (isCloseTag) out.write('/');
-          out.write(temp);
-        }
-      } else {
-        out.write('<');
-        if (isCloseTag) out.write('/');
-        pos = readRawUntilAnyEnd(out, input, pos, [' ', '/', '>']);
+        final StringBuffer name = StringBuffer();
+        if (readRawUntilAnyEnd(
+                name, input, pos, [' ', '/', '>', '\t', '\n', '\r', '\f']) ==
+            -1) return -1;
+        final String tag = name.toString().toLowerCase();
+        // Callers escape the '<' of a rejected tag.
+        if (tag.contains('<') || HTML.isUnsafeHtmlElement(tag)) return -1;
       }
+      out.write('<');
+      if (isCloseTag) out.write('/');
+      pos = readRawUntilAnyEnd(out, input, pos, [' ', '/', '>']);
       if (pos == -1) return -1;
       // A '/' or '>' inside a quoted attribute value (a URL, say) must not end
       // the tag.

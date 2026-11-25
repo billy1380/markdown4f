@@ -577,15 +577,15 @@ class HTML {
 
   /// Set of valid HTML tags.
   static final HashSet<String> _htmlElements =
-      HashSet.from(HTMLElement.values.map((e) => e.toString()));
+      HashSet.from(HTMLElement.values.map(_tagName));
 
   /// Set of unsafe HTML tags.
   static final HashSet<String> _htmlUnsafe =
-      HashSet.from(_UNSAFE_ELEMENTS.map((e) => e.toString()));
+      HashSet.from(_UNSAFE_ELEMENTS.map(_tagName));
 
   /// Set of HTML block level tags.
   static final HashSet<String> _htmlBlockElements =
-      HashSet.from(_BLOCK_ELEMENTS.map((e) => e.toString()));
+      HashSet.from(_BLOCK_ELEMENTS.map(_tagName));
 
   /// Set of valid markdown link prefixes.
   static final HashSet<String> _linkPrefix =
@@ -593,6 +593,9 @@ class HTML {
 
   /// Constructor. (Singleton)
   HTML._();
+
+  static String _tagName(HTMLElement element) =>
+      element.toString().split('.').last.replaceAll('_', '');
 
   ///
   /// @param value String to check.
